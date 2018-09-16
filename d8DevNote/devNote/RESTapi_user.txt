@@ -1,0 +1,313 @@
+
+api/v1/
+
+1. 获得所有用户 
+cmd ： 
+	
+
+return:	
+[{
+  "name": "<a title=\"View user profile.\" href=\"\/d8\/user\/5\" lang=\"\" about=\"\/d8\/user\/5\" typeof=\"schema:Person\" property=\"schema:name\" datatype=\"\" class=\"username\">userman1<\/a>",
+  "field_phone": "13800001005",
+  "field_nickname": "5号昵称"
+}, {
+  "name": "<a title=\"View user profile.\" href=\"\/d8\/user\/4\" lang=\"\" about=\"\/d8\/user\/4\" typeof=\"schema:Person\" property=\"schema:name\" datatype=\"\" class=\"username\">admin2<\/a>",
+  "field_phone": "13800001004",
+  "field_nickname": "4号昵称"
+}, {
+  "name": "<a title=\"View user profile.\" href=\"\/d8\/user\/3\" lang=\"\" about=\"\/d8\/user\/3\" typeof=\"schema:Person\" property=\"schema:name\" datatype=\"\" class=\"username\">admin1<\/a>",
+  "field_phone": "13800001003",
+  "field_nickname": "3号昵称"
+}, {
+  "name": "<a title=\"View user profile.\" href=\"\/d8\/user\/2\" lang=\"\" about=\"\/d8\/user\/2\" typeof=\"schema:Person\" property=\"schema:name\" datatype=\"\" class=\"username\">user1<\/a>",
+  "field_phone": "13800001002",
+  "field_nickname": "2号昵称"
+}, {
+  "name": "<a title=\"View user profile.\" href=\"\/d8\/user\/1\" lang=\"\" about=\"\/d8\/user\/1\" typeof=\"schema:Person\" property=\"schema:name\" datatype=\"\" class=\"username\">admin<\/a>",
+  "field_phone": "13800001001",
+  "field_nickname": "管理员"
+}, {
+  "name": "<span lang=\"\" typeof=\"schema:Person\" property=\"schema:name\" datatype=\"\">Anonymous (not verified)<\/span>",
+  "field_phone": "",
+  "field_nickname": ""
+}]
+
+
+2. 获取单一用户
+
+cmd: 
+	curl -X GET -H 'Authorization: Basic YWRtaW46YWRtaW4=' -i http://localhost/d8/api/v1/user/phone/13800001001
+return:
+[{
+  "name": "<a title=\"View user profile.\" href=\"\/d8\/user\/1\" lang=\"\" about=\"\/d8\/user\/1\" typeof=\"schema:Person\" property=\"schema:name\" datatype=\"\" class=\"username\">admin<\/a>",
+  "field_phone": "13800001001",
+  "field_nickname": "管理员"
+}]
+
+cmd:
+	curl -X GET -H 'Authorization: Basic YWRtaW46YWRtaW4=' -i http://localhost/d8/api/v1/user/phone/13800001002
+respone:
+[{
+  "name": "<a title=\"View user profile.\" href=\"\/d8\/user\/2\" lang=\"\" about=\"\/d8\/user\/2\" typeof=\"schema:Person\" property=\"schema:name\" datatype=\"\" class=\"username\">user1<\/a>",
+  "field_phone": "13800001002",
+  "field_nickname": "2号昵称"
+}]
+
+
+[
+    {
+        "name":"<a title="View user profile." href="/d8/user/9" lang="" about="/d8/user/9" typeof="schema:Person" property="schema:name" datatype="" class="username">13818774810</a>",
+        "field_phone":"13818774810",
+        "field_nickname":"10号昵称",
+        "user_picture":"  <img src="/d8/sites/default/files/pictures/2018-08/cx_0.png" width="48" height="48" alt="" typeof="foaf:Image" />
+
+"
+    }
+]
+
+
+cmd:
+	curl -X GET -H 'Authorization: Basic YWRtaW46YWRtaW4=' -i http://localhost/d8/api/v1/user/phone/13800001009   (没有这个用户)
+resp:
+	[]
+
+
+获取所有信息：
+cmd
+	curl -X GET -H 'Content-Type: application/json' -H 'Authorization: Basic YWRtaW46YWRtaW4=' -i http://localhost/d8/api/v1/userentity/phone/13818774810
+
+resp:
+[{
+  "uid": [{
+    "value": 9
+  }],
+  "uuid": [{
+    "value": "e7db5200-4b0c-423b-9570-7c5067dafe5f"
+  }],
+  "langcode": [{
+    "value": "en"
+  }],
+  "preferred_langcode": [{
+    "value": "en"
+  }],
+  "preferred_admin_langcode": [],
+  "name": [{
+    "value": "13818774810"
+  }],
+  "mail": [{
+    "value": "xiacat@163.com"
+  }],
+  "timezone": [{
+    "value": "Asia\/Shanghai"
+  }],
+  "status": [{
+    "value": true
+  }],
+  "created": [{
+    "value": "2018-08-05T07:44:18+00:00",
+    "format": "Y-m-d\\TH:i:sP"
+  }],
+  "changed": [{
+    "value": "2018-08-05T08:46:09+00:00",
+    "format": "Y-m-d\\TH:i:sP"
+  }],
+  "access": [{
+    "value": "2018-08-05T08:46:09+00:00",
+    "format": "Y-m-d\\TH:i:sP"
+  }],
+  "login": [{
+    "value": "2018-08-05T08:16:00+00:00",
+    "format": "Y-m-d\\TH:i:sP"
+  }],
+  "init": [],
+  "roles": [],
+  "default_langcode": [{
+    "value": true
+  }],
+  "field_nickname": [{
+    "value": "10号昵称"
+  }],
+  "field_phone": [{
+    "value": "13818774810"
+  }],
+  "user_picture": [{
+    "target_id": 3,
+    "alt": "",
+    "title": "",
+    "width": 48,
+    "height": 48,
+    "target_type": "file",
+    "target_uuid": "551db228-4d5a-46f6-9a1b-4d21c95e2329",
+    "url": "http:\/\/localhost\/d8\/sites\/default\/files\/pictures\/2018-08\/cx2.png"
+  }]
+}]
+
+3 创建用户
+
+先通过  http://localhost/d8/rest/session/token （Get）  获得token
+返回： n6dMfVe-95miLVPAGRq5Gs4NJAv3mMXFPEHSnFup6wg
+
+然后发送POST 请求
+
+
+cmd ： (创建管理员）
+curl -X POST -H 'X-CSRF-Token: n6dMfVe-95miLVPAGRq5Gs4NJAv3mMXFPEHSnFup6wg' -H 'Content-Type: application/json' -H 'Authorization: Basic YWRtaW46YWRtaW4=' -i 'http://localhost/d8/entity/user?_format=json' --data '{
+    "name":{"value":"13800001008"},
+    "pass":{"value":"13800001007"},
+    "field_phone":[{"value":"13800001008"}],
+    "field_nickname":[{"value":"8号昵称"}],
+    "roles": [
+        {
+            "target_id": "administrator"
+        }
+    ],
+    "status": [
+        {
+            "value": true
+        }
+    ]
+}'
+
+resp:
+{
+  "uid": [{
+    "value": 7
+  }],
+  "uuid": [{
+    "value": "d58a867d-432d-4f9e-aa67-6358b364b64a"
+  }],
+  "langcode": [{
+    "value": "en"
+  }],
+  "preferred_langcode": [{
+    "value": "en"
+  }],
+  "preferred_admin_langcode": [],
+  "name": [{
+    "value": "13800001008"
+  }],
+  "mail": [],
+  "timezone": [{
+    "value": "Africa\/Abidjan"
+  }],
+  "status": [{
+    "value": true
+  }],
+  "created": [{
+    "value": "2018-08-05T07:36:15+00:00",
+    "format": "Y-m-d\\TH:i:sP"
+  }],
+  "changed": [{
+    "value": "2018-08-05T07:36:15+00:00",
+    "format": "Y-m-d\\TH:i:sP"
+  }],
+  "access": [{
+    "value": "1970-01-01T00:00:00+00:00",
+    "format": "Y-m-d\\TH:i:sP"
+  }],
+  "login": [{
+    "value": "1970-01-01T00:00:00+00:00",
+    "format": "Y-m-d\\TH:i:sP"
+  }],
+  "init": [],
+  "roles": [{
+    "target_id": "administrator",
+    "target_type": "user_role",
+    "target_uuid": "b474e32b-8c90-4d78-af59-a7e4b17e1666"
+  }],
+  "default_langcode": [{
+    "value": true
+  }],
+  "field_nickname": [{
+    "value": "8号昵称"
+  }],
+  "field_phone": [{
+    "value": "13800001008"
+  }],
+  "user_picture": []
+}
+
+
+如果创建已经有的账户：
+resp:
+{
+  "message": "Unprocessable Entity: validation failed.\nname: The username 13800001008 is already taken.\n"
+}
+
+
+cmd （创建普通用户）：
+curl -X POST -H 'X-CSRF-Token: n6dMfVe-95miLVPAGRq5Gs4NJAv3mMXFPEHSnFup6wg' -H 'Content-Type: application/json' -H 'Authorization: Basic YWRtaW46YWRtaW4=' -i 'http://localhost/d8/entity/user?_format=json' --data '{
+    "name":{"value":"13800001009"},
+    "pass":{"value":"1234"},
+    "field_phone":[{"value":"13800001009"}],
+    "field_nickname":[{"value":"9号昵称"}],
+    "roles": [
+        {
+            "target_id": "authenticated"
+        }
+    ],
+    "status": [
+        {
+            "value": true
+        }
+    ]
+}'
+
+resp:
+{
+  "uid": [{
+    "value": 8
+  }],
+  "uuid": [{
+    "value": "f4d738da-b4de-45b9-b059-e99d462ea321"
+  }],
+  "langcode": [{
+    "value": "en"
+  }],
+  "preferred_langcode": [{
+    "value": "en"
+  }],
+  "preferred_admin_langcode": [],
+  "name": [{
+    "value": "13800001009"
+  }],
+  "mail": [],
+  "timezone": [{
+    "value": "Africa\/Abidjan"
+  }],
+  "status": [{
+    "value": true
+  }],
+  "created": [{
+    "value": "2018-08-05T07:39:40+00:00",
+    "format": "Y-m-d\\TH:i:sP"
+  }],
+  "changed": [{
+    "value": "2018-08-05T07:39:40+00:00",
+    "format": "Y-m-d\\TH:i:sP"
+  }],
+  "access": [{
+    "value": "1970-01-01T00:00:00+00:00",
+    "format": "Y-m-d\\TH:i:sP"
+  }],
+  "login": [{
+    "value": "1970-01-01T00:00:00+00:00",
+    "format": "Y-m-d\\TH:i:sP"
+  }],
+  "init": [],
+  "roles": [],
+  "default_langcode": [{
+    "value": true
+  }],
+  "field_nickname": [{
+    "value": "9号昵称"
+  }],
+  "field_phone": [{
+    "value": "13800001009"
+  }],
+  "user_picture": []
+}
+
+
+
+

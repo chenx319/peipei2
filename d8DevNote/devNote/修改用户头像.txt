@@ -1,0 +1,273 @@
+
+修改用户头像
+
+1. 上传文件
+2. patch
+
+详细： 
+1. 上传文件
+
+$body = fopen('../res/frame_1s.jpg', 'r');
+
+
+$uploadUserPicURL = $baseURL.'file/upload/user/user/user_picture?_format=json';
+echo "uploadUserPicURL = $uploadUserPicURL     \n";
+$res = $client->request('POST',
+    $uploadUserPicURL,
+    [
+        'headers' => [
+            'Content-Type'          => 'application/octet-stream',
+            'Content-Disposition'   => 'file; filename="frame_1s.jpg"',
+            'X-CSRF-Token'          => $token
+        ],
+//        'auth' => ['admin', 'admin'],
+        'auth' => ['17839997702', '1234'],
+        'body' => $body
+    ]);
+
+$statusCode = $res->getStatusCode();
+
+返回：  关键信息 fid 
+ 
+{
+    "fid":[
+        {
+            "value":129
+        }
+    ],
+    "uuid":[
+        {
+            "value":"da1f2fb9-dc69-4f3c-9301-c83d1295e626"
+        }
+    ],
+    "langcode":[
+        {
+            "value":"en"
+        }
+    ],
+    "uid":[
+        {
+            "target_id":17,
+            "target_type":"user",
+            "target_uuid":"8eebaffd-59a6-4c90-a0e4-c06c2e095ecb",
+            "url":"/d86/user/17"
+        }
+    ],
+    "filename":[
+        {
+            "value":"frame_1s.jpg"
+        }
+    ],
+    "uri":[
+        {
+            "value":"public://pictures/2018-09/frame_1s_0.jpg",
+            "url":"/d86/sites/default/files/pictures/2018-09/frame_1s_0.jpg"
+        }
+    ],
+    "filemime":[
+        {
+            "value":"image/jpeg"
+        }
+    ],
+    "filesize":[
+        {
+            "value":44974
+        }
+    ],
+    "status":[
+        {
+            "value":false
+        }
+    ],
+    "created":[
+        {
+            "value":"2018-09-07T03:02:46+00:00",
+            "format":"Y-m-d\TH:i:sP"
+        }
+    ],
+    "changed":[
+        {
+            "value":"2018-09-07T03:02:46+00:00",
+            "format":"Y-m-d\TH:i:sP"
+        }
+    ]
+}
+
+
+2 PATCH
+
+$res = $client->request('PATCH',
+    'http://www.uaes.site:8088/d86/user/17?_format=json',
+    [
+        'headers' => [
+            'Content-Type'          => 'application/json',
+            'X-CSRF-Token'          => $token
+        ],
+        'auth' => ['17839997702', '1234'],
+        'body' => $json_string
+    ]);
+
+
+返回：
+
+{
+    "uid":[
+        {
+            "value":17
+        }
+    ],
+    "uuid":[
+        {
+            "value":"8eebaffd-59a6-4c90-a0e4-c06c2e095ecb"
+        }
+    ],
+    "langcode":[
+        {
+            "value":"en"
+        }
+    ],
+    "preferred_langcode":[
+        {
+            "value":"en"
+        }
+    ],
+    "preferred_admin_langcode":[
+
+    ],
+    "name":[
+        {
+            "value":"17839997702"
+        }
+    ],
+    "mail":[
+        {
+            "value":"17839997702@mail1.com"
+        }
+    ],
+    "timezone":[
+        {
+            "value":"Asia/Shanghai"
+        }
+    ],
+    "status":[
+        {
+            "value":true
+        }
+    ],
+    "created":[
+        {
+            "value":"2018-08-27T08:29:22+00:00",
+            "format":"Y-m-d\TH:i:sP"
+        }
+    ],
+    "changed":[
+        {
+            "value":"2018-09-07T03:02:47+00:00",
+            "format":"Y-m-d\TH:i:sP"
+        }
+    ],
+    "access":[
+        {
+            "value":"2018-09-07T03:02:46+00:00",
+            "format":"Y-m-d\TH:i:sP"
+        }
+    ],
+    "login":[
+        {
+            "value":"2018-09-07T02:45:01+00:00",
+            "format":"Y-m-d\TH:i:sP"
+        }
+    ],
+    "init":[
+
+    ],
+    "roles":[
+
+    ],
+    "default_langcode":[
+        {
+            "value":true
+        }
+    ],
+    "field_personalpicshow":[
+
+    ],
+    "field_user_age":[
+
+    ],
+    "field_user_game_level":[
+        {
+            "value":"青铜1星"
+        }
+    ],
+    "field_user_game_platform":[
+        {
+            "value":"安卓QQ"
+        }
+    ],
+    "field_user_gamename":[
+        {
+            "value":"王者荣耀"
+        }
+    ],
+    "field_user_gender":[
+
+    ],
+    "field_user_isvip":[
+        {
+            "value":false
+        }
+    ],
+    "field_user_level":[
+
+    ],
+    "field_user_location":[
+
+    ],
+    "field_user_matches":[
+
+    ],
+    "field_user_mobile":[
+        {
+            "value":"17839997702"
+        }
+    ],
+    "field_user_nickname":[
+        {
+            "value":"记芋跨奖"
+        }
+    ],
+    "field_user_platform":[
+
+    ],
+    "field_user_point":[
+
+    ],
+    "field_user_stars":[
+
+    ],
+    "field_user_starsign":[
+
+    ],
+    "field_user_statement":[
+
+    ],
+    "field_user_tags":[
+
+    ],
+    "field_user_voice":[
+
+    ],
+    "user_picture":[
+        {
+            "target_id":129,
+            "alt":null,
+            "title":null,
+            "width":1280,
+            "height":720,
+            "target_type":"file",
+            "target_uuid":"da1f2fb9-dc69-4f3c-9301-c83d1295e626",
+            "url":"http://www.uaes.site:8088/d86/sites/default/files/pictures/2018-09/frame_1s_0.jpg"
+        }
+    ]
+}

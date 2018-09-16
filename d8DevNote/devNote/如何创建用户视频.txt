@@ -1,0 +1,384 @@
+本文说明如何创建用户视频
+
+1. 3个概念
+  1） drupal 中的个entity（实体） ： file 、 media、node
+  2)  用户视频是一个node（node），他的一个字段是视频（类型：field_user_video，是Entity reference，也就是一个引用类型）
+      field_user_video类型是Video的Media type， 他的一个字段名称：Video file，机读名称：field_media_video_file，类型File
+
+  3) 对应的关系：
+		node （包含） Entity reference （引用） media （包含） file
+	也就是	用户“视频” （包含）“视频”（引用）“media”（包含）“file”
+
+  4) 所以，创建用户视频步骤：
+	第1步 ： 上传视频文件，获得fid
+	第2步：  创建Media，获得 Media id
+	第3步：  创建用户视频,把“视频”字段和Media id关联
+
+
+2 实例：
+	第1步：上传视频文件，获得fid
+$res = $client->request('POST',
+    'http://www.uaes.site:8088/d86/file/upload/media/video/field_media_video_file?_format=json',
+    [
+        'headers' => [
+            'Content-Type'          => 'application/octet-stream',
+            'Content-Disposition'   => 'file; filename="王者荣耀example2.mp4"',
+            'X-CSRF-Token'          => $token
+        ],
+        'auth' => ['admin', 'admin'],
+        'body' => $body
+    ]);
+
+返回： (关键信息 fid 49）
+{
+    "fid":[
+        {
+            "value":49
+        }
+    ],
+    "uuid":[
+        {
+            "value":"f2c933e9-e66e-47e4-afa9-a5db024ea934"
+        }
+    ],
+    "langcode":[
+        {
+            "value":"en"
+        }
+    ],
+    "uid":[
+        {
+            "target_id":1,
+            "target_type":"user",
+            "target_uuid":"c2b09ff8-345a-43fa-b9ae-68af0c9cd3ea",
+            "url":"/d86/user/1"
+        }
+    ],
+    "filename":[
+        {
+            "value":"example2.mp4"
+        }
+    ],
+    "uri":[
+        {
+            "value":"public://2018-09/example2.mp4",
+            "url":"/d86/sites/default/files/2018-09/example2.mp4"
+        }
+    ],
+    "filemime":[
+        {
+            "value":"video/mp4"
+        }
+    ],
+    "filesize":[
+        {
+            "value":6320348
+        }
+    ],
+    "status":[
+        {
+            "value":false
+        }
+    ],
+    "created":[
+        {
+            "value":"2018-09-01T05:05:33+00:00",
+            "format":"Y-m-d\TH:i:sP"
+        }
+    ],
+    "changed":[
+        {
+            "value":"2018-09-01T05:05:33+00:00",
+            "format":"Y-m-d\TH:i:sP"
+        }
+    ]
+}
+
+第2步：创建Media，获得 Media id  （里面的field_media_video_file的target_id值就是上一步获取的fid）
+
+curl -X POST -H 'Content-Type: application/json' -H 'X-CSRF-Token: t1TcGnCyC7VBHMzVroeYi5KLUx73gmpnhPqE6ZXCeZU' -H 'Authorization: Basic YWRtaW46YWRtaW4=' -i 'http://www.uaes.site:8088/d86/entity/media?_format=json' --data '{
+  "bundle": [{
+    "target_id": "video",
+    "target_type": "media_type"
+  }],
+  
+  "name": [{
+    "value": "sample2"
+  }],
+  "uid": [{
+    "target_id": 3,
+    "target_type": "user"
+  }],
+
+  "field_media_video_file": [{
+    "target_type": "file",
+    "target_id": 49
+  }]
+}'
+
+返回：（关键信息 mid 的value）
+{
+    "mid":[
+        {
+            "value":9
+        }
+    ],
+    "uuid":[
+        {
+            "value":"60389e65-9eac-4526-a583-24d6c19c03f6"
+        }
+    ],
+    "vid":[
+        {
+            "value":10
+        }
+    ],
+    "langcode":[
+        {
+            "value":"en"
+        }
+    ],
+    "bundle":[
+        {
+            "target_id":"video",
+            "target_type":"media_type",
+            "target_uuid":"a2b3cf90-340d-4e2a-a485-9787061fcdaf"
+        }
+    ],
+    "revision_created":[
+        {
+            "value":"2018-09-01T05:05:48+00:00",
+            "format":"Y-m-d\TH:i:sP"
+        }
+    ],
+    "revision_user":[
+
+    ],
+    "revision_log_message":[
+
+    ],
+    "status":[
+        {
+            "value":true
+        }
+    ],
+    "name":[
+        {
+            "value":"sample2"
+        }
+    ],
+    "thumbnail":[
+        {
+            "target_id":12,
+            "alt":"Thumbnail",
+            "title":"sample2",
+            "width":180,
+            "height":180,
+            "target_type":"file",
+            "target_uuid":"b64462af-c8c3-4723-93fe-34a8fa44adfa",
+            "url":"http://www.uaes.site:8088/d86/sites/default/files/media-icons/generic/video.png"
+        }
+    ],
+    "uid":[
+        {
+            "target_id":3,
+            "target_type":"user",
+            "target_uuid":"d04c14e7-d61c-4fbf-bcee-0c7170d56fad",
+            "url":"/d86/user/3"
+        }
+    ],
+    "created":[
+        {
+            "value":"2018-09-01T05:05:48+00:00",
+            "format":"Y-m-d\TH:i:sP"
+        }
+    ],
+    "changed":[
+        {
+            "value":"2018-09-01T05:05:48+00:00",
+            "format":"Y-m-d\TH:i:sP"
+        }
+    ],
+    "default_langcode":[
+        {
+            "value":true
+        }
+    ],
+    "revision_translation_affected":[
+        {
+            "value":true
+        }
+    ],
+    "moderation_state":[
+
+    ],
+    "path":[
+        {
+            "alias":null,
+            "pid":null,
+            "langcode":"en"
+        }
+    ],
+    "field_media_video_file":[
+        {
+            "target_id":49,
+            "display":null,
+            "description":null,
+            "target_type":"file",
+            "target_uuid":"f2c933e9-e66e-47e4-afa9-a5db024ea934",
+            "url":"http://www.uaes.site:8088/d86/sites/default/files/2018-09/example2.mp4"
+        }
+    ]
+}
+
+第3步：
+创建“用户视频”node：
+curl -X POST -H 'Content-Type: application/json' -H 'X-CSRF-Token: t1TcGnCyC7VBHMzVroeYi5KLUx73gmpnhPqE6ZXCeZU' -H 'Authorization: Basic YWRtaW46YWRtaW4=' -i 'http://www.uaes.site:8088/d86/node?_format=json' --data '{
+  "type": [{
+    "target_id": "user_video",
+    "target_type": "node_type"
+  }],
+
+  "title": [{
+    "value": "sample video test"
+  }],
+  "uid": [{
+    "target_id": 2,
+    "target_type": "user"
+  }],
+  "field_user_video": [{
+    "target_id": 9,
+    "target_type": "media"
+  }]
+}'
+
+返回：
+{
+    "nid":[
+        {
+            "value":28
+        }
+    ],
+    "uuid":[
+        {
+            "value":"d0173984-39eb-4428-9219-dd72fb70f3d7"
+        }
+    ],
+    "vid":[
+        {
+            "value":38
+        }
+    ],
+    "langcode":[
+        {
+            "value":"en"
+        }
+    ],
+    "type":[
+        {
+            "target_id":"user_video",
+            "target_type":"node_type",
+            "target_uuid":"74475e43-4031-45a3-b699-17e46a1b4c70"
+        }
+    ],
+    "revision_timestamp":[
+        {
+            "value":"2018-09-01T05:09:28+00:00",
+            "format":"Y-m-d\TH:i:sP"
+        }
+    ],
+    "revision_uid":[
+        {
+            "target_id":2,
+            "target_type":"user",
+            "target_uuid":"9c426e78-254f-4833-9af8-98d90eece083",
+            "url":"/d86/user/2"
+        }
+    ],
+    "revision_log":[
+
+    ],
+    "status":[
+        {
+            "value":true
+        }
+    ],
+    "title":[
+        {
+            "value":"sample video test"
+        }
+    ],
+    "uid":[
+        {
+            "target_id":2,
+            "target_type":"user",
+            "target_uuid":"9c426e78-254f-4833-9af8-98d90eece083",
+            "url":"/d86/user/2"
+        }
+    ],
+    "created":[
+        {
+            "value":"2018-09-01T05:09:28+00:00",
+            "format":"Y-m-d\TH:i:sP"
+        }
+    ],
+    "changed":[
+        {
+            "value":"2018-09-01T05:09:28+00:00",
+            "format":"Y-m-d\TH:i:sP"
+        }
+    ],
+    "promote":[
+        {
+            "value":true
+        }
+    ],
+    "sticky":[
+        {
+            "value":false
+        }
+    ],
+    "default_langcode":[
+        {
+            "value":true
+        }
+    ],
+    "revision_translation_affected":[
+        {
+            "value":true
+        }
+    ],
+    "moderation_state":[
+
+    ],
+    "path":[
+        {
+            "alias":null,
+            "pid":null,
+            "langcode":"en"
+        }
+    ],
+    "body":[
+
+    ],
+    "field_simple_comments_on_video":[
+        {
+            "status":2,
+            "cid":0,
+            "last_comment_timestamp":0,
+            "last_comment_name":null,
+            "last_comment_uid":0,
+            "comment_count":0
+        }
+    ],
+    "field_user_video":[
+        {
+            "target_id":9,
+            "target_type":"media",
+            "target_uuid":"60389e65-9eac-4526-a583-24d6c19c03f6",
+            "url":"/d86/media/9"
+        }
+    ]
+}
+
+
